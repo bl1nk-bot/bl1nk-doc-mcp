@@ -1,0 +1,14 @@
+# Build output
+target/
+**/*.rs.bk
+
+# Local databases
+craft.db
+*.db
+
+# IDE / OS
+.idea/
+.vscode/
+*.swp
+*~
+.DS_Store

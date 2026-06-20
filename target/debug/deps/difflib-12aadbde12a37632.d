@@ -1,0 +1,8 @@
+/data/data/com.termux/files/home/00dev/bl1nk-doc-mcp/target/debug/deps/difflib-12aadbde12a37632.d: /data/data/com.termux/files/home/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/difflib-0.4.0/src/lib.rs /data/data/com.termux/files/home/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/difflib-0.4.0/src/differ.rs /data/data/com.termux/files/home/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/difflib-0.4.0/src/sequencematcher.rs /data/data/com.termux/files/home/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/difflib-0.4.0/src/utils.rs
+
+/data/data/com.termux/files/home/00dev/bl1nk-doc-mcp/target/debug/deps/libdifflib-12aadbde12a37632.rmeta: /data/data/com.termux/files/home/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/difflib-0.4.0/src/lib.rs /data/data/com.termux/files/home/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/difflib-0.4.0/src/differ.rs /data/data/com.termux/files/home/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/difflib-0.4.0/src/sequencematcher.rs /data/data/com.termux/files/home/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/difflib-0.4.0/src/utils.rs
+
+/data/data/com.termux/files/home/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/difflib-0.4.0/src/lib.rs:
+/data/data/com.termux/files/home/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/difflib-0.4.0/src/differ.rs:
+/data/data/com.termux/files/home/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/difflib-0.4.0/src/sequencematcher.rs:
+/data/data/com.termux/files/home/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/difflib-0.4.0/src/utils.rs:
