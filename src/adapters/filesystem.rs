@@ -1,7 +1,4 @@
-use std::{
-    path::{Path, PathBuf},
-    time::{SystemTime, UNIX_EPOCH},
-};
+use std::path::{Path, PathBuf};
 
 use anyhow::{Context, Result};
 use thiserror::Error;
@@ -93,8 +90,18 @@ impl SafeRepositoryFs {
     }
 
     pub fn exists(&self, relative: impl AsRef<Path>) -> Result<bool> {
-        let path = self.resolve(relative)?;
-        Ok(path.exists())
+        let relative = relative.as_ref();
+        let components = relative.components().collect::<Vec<_>>();
+        for component in &components {
+            if matches!(component, std::path::Component::ParentDir) {
+                anyhow::bail!(ServerError::PathTraversal {
+                    path: relative.display().to_string()
+                });
+            }
+        }
+
+        let target = self.repo_root.join(relative);
+        Ok(target.exists())
     }
 
     pub fn read(&self, relative: impl AsRef<Path>) -> Result<String> {

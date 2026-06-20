@@ -1,9 +1,12 @@
 use std::path::PathBuf;
 
 use anyhow::Result;
+use pmcp::{Server, ServerCapabilities};
 use tracing_subscriber::fmt;
 use tracing_subscriber::prelude::*;
 use tracing_subscriber::EnvFilter;
+
+use crate::tools::status::RepoStatusTool;
 
 pub struct Bl1nkDocMcpServer {
     repo_root: PathBuf,
@@ -16,9 +19,18 @@ impl Bl1nkDocMcpServer {
         }
     }
 
-    pub fn run(&self) -> Result<()> {
+    pub async fn run(&self) -> Result<()> {
         tracing::info!(repo = ?self.repo_root, "starting bl1nk-doc-mcp server");
+
+        let server = Server::builder()
+            .name("bl1nk-doc-mcp")
+            .version("0.1.0")
+            .capabilities(ServerCapabilities::tools_only())
+            .tool("repo_status", RepoStatusTool::new(self.repo_root.clone()))
+            .build()?;
+
         tracing::info!("pmcp stdio server initialized");
+        server.run_stdio().await?;
         Ok(())
     }
 }

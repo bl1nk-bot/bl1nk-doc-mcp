@@ -31,7 +31,11 @@ pub struct ChangeLedgerEvent {
 }
 
 impl ChangeLedgerEvent {
-    pub fn new(task_id: impl Into<String>, intent: impl Into<String>, status: ChangeStatus) -> Self {
+    pub fn new(
+        task_id: impl Into<String>,
+        intent: impl Into<String>,
+        status: ChangeStatus,
+    ) -> Self {
         Self {
             id: Uuid::now_v7().to_string(),
             timestamp: Utc::now().to_rfc3339(),
