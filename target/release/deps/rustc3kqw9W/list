@@ -1,9 +1,0 @@
-{
-  global:
-    __rustc_proc_macro_decls_a36c6dafb683e24__;
-    rust_metadata_zerofrom_derive_a36c6dafb683e24;
-    __emutls_get_address;
-
-  local:
-    *;
-};

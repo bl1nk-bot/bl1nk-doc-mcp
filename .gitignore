@@ -1,3 +1,6 @@
+# Codegraph local database
+.codegraph/
+
 # Build output
 target/
 **/*.rs.bk
@@ -6,9 +9,32 @@ target/
 craft.db
 *.db
 
-# IDE / OS
+# Generated artifacts (if any)
+# docs/generated/
+
+# IDE / Editor
 .idea/
 .vscode/
 *.swp
 *~
+.vim/
+
+# OS
 .DS_Store
+Thumbs.db
+
+# Lock files (uncomment if NOT committing Cargo.lock)
+# Cargo.lock
+
+# Cargo test / benchmark output
+coverage/
+*.prof*
+*.gcov
+*.gcda
+*.gcno
+
+# Misc
+*.orig
+*.rej
+*.sublime-workspace
+*.sublime-project
