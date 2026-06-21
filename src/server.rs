@@ -7,6 +7,7 @@ use tracing_subscriber::prelude::*;
 use tracing_subscriber::EnvFilter;
 
 use crate::tools::status::RepoStatusTool;
+use crate::tools::context_bundle::ContextBundleTool;
 
 pub struct Bl1nkDocMcpServer {
     repo_root: PathBuf,
@@ -27,6 +28,7 @@ impl Bl1nkDocMcpServer {
             .version("0.1.0")
             .capabilities(ServerCapabilities::tools_only())
             .tool("repo_status", RepoStatusTool::new(self.repo_root.clone()))
+            .tool("get_context_bundle", ContextBundleTool::new(self.repo_root.clone()))
             .build()?;
 
         tracing::info!("pmcp stdio server initialized");

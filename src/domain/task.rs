@@ -50,7 +50,8 @@ pub struct AcceptanceCheck {
 }
 
 #[allow(dead_code)]
-#[derive(Debug, Clone, Serialize, Deserialize, JsonSchema)]
+#[derive(Debug, Clone, Serialize, Deserialize, JsonSchema, thiserror::Error)]
+#[error("task contract parse error: {missing_field} — {reason}")]
 pub struct TaskContractParseError {
     pub missing_field: String,
     pub reason: String,

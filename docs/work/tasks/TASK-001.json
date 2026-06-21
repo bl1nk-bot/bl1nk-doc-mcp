@@ -1,0 +1,50 @@
+{
+  "id": "TASK-001",
+  "title": "Create task contract system",
+  "objective": "Implement a task contract parser/validator and establish a canonical task contract format for the bl1nk-doc-mcp project.",
+  "non_goals": [
+    "Do not implement tool execution handlers.",
+    "Do not modify repository state beyond task contracts."
+  ],
+  "affected_contracts": [
+    "src/domain/task.rs",
+    "docs/work/tasks/TASK-001.md"
+  ],
+  "invariants": [
+    "Task contracts are read-only and validated deterministically.",
+    "Acceptance checks can be pending, passed, failed, or skipped."
+  ],
+  "acceptance_checks": [
+    {
+      "id": "AC-001",
+      "description": "TaskContract can be parsed from valid JSON",
+      "required": true,
+      "status": "passed"
+    },
+    {
+      "id": "AC-002",
+      "description": "Parser rejects missing objective",
+      "required": true,
+      "status": "passed"
+    },
+    {
+      "id": "AC-003",
+      "description": "Parser rejects empty id",
+      "required": true,
+      "status": "passed"
+    },
+    {
+      "id": "AC-004",
+      "description": "Parser rejects invalid acceptance checks",
+      "required": true,
+      "status": "passed"
+    },
+    {
+      "id": "AC-005",
+      "description": "Unit tests cover parse and validate paths",
+      "required": true,
+      "status": "passed"
+    }
+  ],
+  "status": "completed"
+}
