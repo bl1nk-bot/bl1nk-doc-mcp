@@ -72,7 +72,7 @@
 |---|-------|--------------|--------------|--------|
 | 7 | Create task contract system (Task domain model + TASK-001 example) | `src/domain/task.rs`, `docs/work/tasks/TASK-001.md` | — | Done (fddd672) |
 | 8 | Implement `get_context_bundle` tool | `src/tools/context_bundle.rs`, `src/resources/task.rs`, `src/resources/ledger.rs` | #7 (ต้องรู้จัก task contract) | Done (5315e89) |
-| 9 | Implement `analyze_change_impact` tool | `src/tools/impact.rs`, `src/domain/impact.rs` | #8 (ต้องมี context bundle ก่อน) |
+| 9 | Implement `analyze_change_impact` tool | `src/tools/impact.rs`, `src/domain/impact.rs` | #8 (ต้องมี context bundle ก่อน) | Done (2bf282f) |
 | 11 | Implement `validate_task_completion` tool | `src/tools/validate.rs`, `src/domain/validation.rs` | #7, #9 |
 
 ### P2 — High Priority
