@@ -1,0 +1,31 @@
+name: bl1nk-doc-mcp
+version: 0.1.0
+kind: backend
+description: Minimal MCP server for task-scoped repository knowledge — exposes Git status, task ledger, and evidence bundles to Hermes/MCP clients.
+entrypoint: ""
+runtime: rust
+binary: target/release/bl1nk-doc-mcp
+capabilities:
+  - mcp
+  - tools
+  - resources
+  - prompts
+config:
+  repo_root:
+    type: string
+    required: false
+    description: Repository root path (defaults to current working directory)
+  include_recent_commits:
+    type: integer
+    required: false
+    description: Number of recent commits to include in repo_status (default 10, max 50)
+permissions:
+  - fs.read
+  - fs.write
+  - git.read
+  - git.status
+tags:
+  - mcp
+  - rust
+  - repository
+  - task-management

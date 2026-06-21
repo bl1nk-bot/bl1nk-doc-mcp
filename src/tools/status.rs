@@ -144,6 +144,49 @@ impl RepoStatusTool {
     }
 }
 
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn clamp_include_recent_commits_defaults_to_10() {
+        assert_eq!(clamp_include_recent_commits(None), 10);
+    }
+
+    #[test]
+    fn clamp_include_recent_commits_passes_through_valid() {
+        assert_eq!(clamp_include_recent_commits(Some(5)), 5);
+        assert_eq!(clamp_include_recent_commits(Some(50)), 50);
+    }
+
+    #[test]
+    fn clamp_include_recent_commits_limits_to_max() {
+        assert_eq!(clamp_include_recent_commits(Some(100)), 50);
+    }
+
+    #[test]
+    fn clamp_include_recent_commits_allows_zero() {
+        assert_eq!(clamp_include_recent_commits(Some(0)), 0);
+    }
+
+    #[test]
+    fn repo_rel_path_strips_prefix() {
+        let repo = std::path::Path::new("/tmp/repo");
+        let absolute = std::path::Path::new("/tmp/repo/src/main.rs");
+        assert_eq!(
+            repo_rel_path(repo, absolute),
+            Some("src/main.rs".to_string())
+        );
+    }
+
+    #[test]
+    fn repo_rel_path_returns_none_when_no_prefix() {
+        let repo = std::path::Path::new("/tmp/repo");
+        let absolute = std::path::Path::new("/tmp/other/src/main.rs");
+        assert_eq!(repo_rel_path(repo, absolute), None);
+    }
+}
+
 #[async_trait]
 impl ToolHandler for RepoStatusTool {
     async fn handle(

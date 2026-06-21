@@ -138,3 +138,86 @@ impl SafeRepositoryFs {
         &self.repo_root
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use tempfile::tempdir;
+
+    #[test]
+    fn resolve_blocks_parent_dir_traversal() {
+        let dir = tempdir().unwrap();
+        let fs = SafeRepositoryFs::new(dir.path().to_path_buf());
+        let result = fs.resolve("../../../etc/passwd");
+        assert!(result.is_err());
+        let err = result.unwrap_err().to_string();
+        assert!(err.contains("path traversal"), "expected traversal error, got: {err}");
+    }
+
+    #[test]
+    fn resolve_allows_safe_relative_path() {
+        let dir = tempdir().unwrap();
+        let target = dir.path().join("docs").join("README.md");
+        std::fs::create_dir_all(target.parent().unwrap()).unwrap();
+        std::fs::write(&target, "hello").unwrap();
+
+        let fs = SafeRepositoryFs::new(dir.path().to_path_buf());
+        let resolved = fs.resolve("docs/README.md").unwrap();
+        assert_eq!(resolved, target);
+    }
+
+    #[test]
+    fn exists_reports_true_for_existing_file() {
+        let dir = tempdir().unwrap();
+        let target = dir.path().join("foo.txt");
+        std::fs::write(&target, "x").unwrap();
+
+        let fs = SafeRepositoryFs::new(dir.path().to_path_buf());
+        assert!(fs.exists("foo.txt").unwrap());
+    }
+
+    #[test]
+    fn exists_reports_false_for_missing_file() {
+        let dir = tempdir().unwrap();
+        let fs = SafeRepositoryFs::new(dir.path().to_path_buf());
+        assert!(!fs.exists("nope.txt").unwrap());
+    }
+
+    #[test]
+    fn exists_blocks_parent_dir_traversal() {
+        let dir = tempdir().unwrap();
+        let fs = SafeRepositoryFs::new(dir.path().to_path_buf());
+        let result = fs.exists("../../../etc/passwd");
+        assert!(result.is_err());
+    }
+
+    #[test]
+    fn read_returns_contents() {
+        let dir = tempdir().unwrap();
+        let target = dir.path().join("bar.txt");
+        std::fs::write(&target, "content").unwrap();
+
+        let fs = SafeRepositoryFs::new(dir.path().to_path_buf());
+        assert_eq!(fs.read("bar.txt").unwrap(), "content");
+    }
+
+    #[test]
+    fn read_errors_on_missing_file() {
+        let dir = tempdir().unwrap();
+        let fs = SafeRepositoryFs::new(dir.path().to_path_buf());
+        let result = fs.read("missing.txt");
+        assert!(result.is_err());
+    }
+
+    #[test]
+    fn append_extends_existing_file() {
+        let dir = tempdir().unwrap();
+        let target = dir.path().join("existing.txt");
+        std::fs::write(&target, "hello").unwrap();
+
+        let fs = SafeRepositoryFs::new(dir.path().to_path_buf());
+        let bytes = fs.append("existing.txt", " world").unwrap();
+        assert_eq!(bytes, 6);
+        assert_eq!(fs.read("existing.txt").unwrap(), "hello world");
+    }
+}

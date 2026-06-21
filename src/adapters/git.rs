@@ -200,4 +200,32 @@ mod tests {
             Ok(self.log.clone())
         }
     }
+
+    #[test]
+    fn fake_adapter_returns_branch() {
+        let adapter = FakeGitAdapter {
+            branch: "main".to_string(),
+            head_commit: "abc123".to_string(),
+            status: vec![],
+            log: vec![],
+            fail: false,
+        };
+        let rt = tokio::runtime::Runtime::new().unwrap();
+        let branch = rt.block_on(adapter.branch()).unwrap();
+        assert_eq!(branch, "main");
+    }
+
+    #[test]
+    fn fake_adapter_returns_error_when_fail() {
+        let adapter = FakeGitAdapter {
+            branch: "main".to_string(),
+            head_commit: "abc123".to_string(),
+            status: vec![],
+            log: vec![],
+            fail: true,
+        };
+        let rt = tokio::runtime::Runtime::new().unwrap();
+        let result = rt.block_on(adapter.branch());
+        assert!(result.is_err());
+    }
 }

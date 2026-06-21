@@ -63,6 +63,65 @@ impl ChangeLedgerEvent {
     }
 }
 
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn new_event_has_generated_fields() {
+        let event = ChangeLedgerEvent::new("TASK-1", "fix bug", ChangeStatus::Draft);
+        assert!(!event.id.is_empty());
+        assert!(!event.timestamp.is_empty());
+        assert!(event.commit.is_none());
+        assert_eq!(event.task_id, "TASK-1");
+        assert_eq!(event.intent, "fix bug");
+        assert!(event.scope.is_empty());
+        assert!(event.changed_contracts.is_empty());
+        assert!(event.invariants_added.is_empty());
+        assert!(event.validations.is_empty());
+    }
+
+    #[test]
+    fn is_valid_rejects_empty_scope() {
+        let event = ChangeLedgerEvent::new("TASK-1", "fix", ChangeStatus::Draft);
+        assert!(!event.is_valid(), "empty scope should be invalid");
+    }
+
+    #[test]
+    fn is_valid_accepts_non_empty_scope_draft() {
+        let mut event = ChangeLedgerEvent::new("TASK-1", "fix", ChangeStatus::Draft);
+        event.scope = vec!["src/main.rs".to_string()];
+        assert!(event.is_valid(), "draft with scope should be valid");
+    }
+
+    #[test]
+    fn is_valid_rejects_verified_without_passing_validations() {
+        let mut event = ChangeLedgerEvent::new("TASK-1", "fix", ChangeStatus::Verified);
+        event.scope = vec!["src/main.rs".to_string()];
+        event.validations = vec![crate::domain::evidence::ValidationResult {
+            command: "clippy".to_string(),
+            passed: false,
+            executed_at: chrono::Utc::now().to_rfc3339(),
+        }];
+        assert!(
+            !event.is_valid(),
+            "verified without passing validation should be invalid"
+        );
+    }
+
+    #[test]
+    fn is_valid_accepts_verified_with_passing_validations() {
+        let mut event = ChangeLedgerEvent::new("TASK-1", "fix", ChangeStatus::Verified);
+        event.scope = vec!["src/main.rs".to_string()];
+        event.validations = vec![crate::domain::evidence::ValidationResult {
+            command: "clippy".to_string(),
+            passed: true,
+            executed_at: chrono::Utc::now().to_rfc3339(),
+        }];
+        assert!(event.is_valid(), "verified with passing validation should be valid");
+    }
+}
+
 #[allow(dead_code)]
 #[derive(Debug, Clone, Serialize, Deserialize, JsonSchema)]
 pub struct LedgerAppendError {

@@ -38,3 +38,4 @@ coverage/
 *.rej
 *.sublime-workspace
 *.sublime-project
+__pycache__/
