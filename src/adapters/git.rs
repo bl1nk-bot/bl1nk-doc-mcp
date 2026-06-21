@@ -34,6 +34,11 @@ pub trait GitGateway: Send + Sync {
     async fn head_commit(&self) -> Result<String, GitError>;
     async fn status_porcelain(&self) -> Result<Vec<(String, String)>, GitError>;
     async fn log(&self, max_count: u8) -> Result<Vec<CommitSummary>, GitError>;
+    async fn diff_names(
+        &self,
+        base_ref: &str,
+        head_ref: &str,
+    ) -> Result<Vec<String>, GitError>;
 }
 
 #[derive(Debug, Clone)]
@@ -154,6 +159,29 @@ impl GitGateway for ProductionGitAdapter {
         }
         Ok(commits)
     }
+
+    async fn diff_names(&self, base_ref: &str, head_ref: &str) -> Result<Vec<String>, GitError> {
+        let output = self
+            .run(&["diff", "--name-only", base_ref, head_ref])
+            .await?;
+        if !output.status.success() {
+            let stderr = String::from_utf8_lossy(&output.stderr).to_string();
+            return Err(GitError::CommandFailed {
+                command: format!("git diff --name-only {} {}", base_ref, head_ref),
+                stderr,
+            });
+        }
+        let stdout =
+            String::from_utf8(output.stdout).map_err(|e| GitError::OutputRead(e.to_string()))?;
+        let mut files = Vec::new();
+        for line in stdout.lines() {
+            let trimmed = line.trim();
+            if !trimmed.is_empty() {
+                files.push(trimmed.to_string());
+            }
+        }
+        Ok(files)
+    }
 }
 
 #[cfg(test)]
@@ -198,6 +226,17 @@ mod tests {
                 return Err(GitError::NotGitRepo("fake".to_string()));
             }
             Ok(self.log.clone())
+        }
+
+        async fn diff_names(
+            &self,
+            _base_ref: &str,
+            _head_ref: &str,
+        ) -> Result<Vec<String>, GitError> {
+            if self.fail {
+                return Err(GitError::NotGitRepo("fake".to_string()));
+            }
+            Ok(Vec::new())
         }
     }
 
