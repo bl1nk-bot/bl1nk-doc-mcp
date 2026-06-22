@@ -151,7 +151,10 @@ mod tests {
         let result = fs.resolve("../../../etc/passwd");
         assert!(result.is_err());
         let err = result.unwrap_err().to_string();
-        assert!(err.contains("path traversal"), "expected traversal error, got: {err}");
+        assert!(
+            err.contains("path traversal"),
+            "expected traversal error, got: {err}"
+        );
     }
 
     #[test]
