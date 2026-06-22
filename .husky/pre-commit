@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+set -eu
+echo "=== husky: fmt ==="
+cargo fmt --all
+echo "=== husky: clippy ==="
+cargo clippy --workspace --all-targets -- -D warnings
+echo "=== husky: test ==="
+cargo test --workspace
+echo "=== husky: passed ==="
