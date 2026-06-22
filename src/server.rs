@@ -9,6 +9,7 @@ use tracing_subscriber::EnvFilter;
 use crate::tools::status::RepoStatusTool;
 use crate::tools::context_bundle::ContextBundleTool;
 use crate::tools::impact::AnalyzeImpactTool;
+use crate::tools::ledger::AppendLedgerTool;
 
 pub struct Bl1nkDocMcpServer {
     repo_root: PathBuf,
@@ -33,6 +34,10 @@ impl Bl1nkDocMcpServer {
             .tool(
                 "analyze_change_impact",
                 AnalyzeImpactTool::new(self.repo_root.clone()),
+            )
+            .tool(
+                "append_change_ledger",
+                AppendLedgerTool::new(self.repo_root.clone()),
             )
             .build()?;
 
