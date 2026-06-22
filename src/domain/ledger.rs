@@ -124,6 +124,45 @@ mod tests {
 
 #[allow(dead_code)]
 #[derive(Debug, Clone, Serialize, Deserialize, JsonSchema)]
+pub struct AppendLedgerInput {
+    pub task_id: String,
+    pub intent: String,
+    pub scope: Vec<String>,
+    pub changed_contracts: Vec<String>,
+    #[serde(default)]
+    pub invariants_added: Vec<String>,
+    pub validations: Vec<crate::domain::evidence::ValidationResult>,
+    #[serde(rename = "status")]
+    pub status: ChangeStatus,
+    pub commit: Option<String>,
+}
+
+impl From<AppendLedgerInput> for ChangeLedgerEvent {
+    fn from(value: AppendLedgerInput) -> Self {
+        Self {
+            id: Uuid::now_v7().to_string(),
+            timestamp: Utc::now().to_rfc3339(),
+            commit: value.commit,
+            task_id: value.task_id,
+            scope: value.scope,
+            intent: value.intent,
+            changed_contracts: value.changed_contracts,
+            invariants_added: value.invariants_added,
+            validations: value.validations,
+            status: value.status,
+        }
+    }
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize, JsonSchema)]
+pub struct AppendLedgerOutput {
+    pub id: String,
+    pub timestamp: String,
+    pub status: ChangeStatus,
+}
+
+#[allow(dead_code)]
+#[derive(Debug, Clone, Serialize, Deserialize, JsonSchema)]
 pub struct LedgerAppendError {
     pub reason: String,
 }
