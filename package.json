@@ -1,0 +1,36 @@
+{
+  "name": "bl1nk-doc-mcp",
+  "version": "1.0.0",
+  "description": "MCP server ที่เขียนด้วย Rust และ `pmcp` สำหรับให้ AI agent อ่านเฉพาะ **“หลักฐานขั้นต่ำที่เชื่อถือได้”** ของ task หนึ่งงาน แทนการอ่าน repository ทั้งหมด ระบบนี้คือ **deterministic repository knowledge gateway**",
+  "main": "index.js",
+  "directories": {
+    "doc": "docs",
+    "test": "tests"
+  },
+  "scripts": {
+    "prepare": "husky",
+    "quality": "cargo fmt --all && cargo clippy --workspace --all-targets -- -D warnings && cargo test --workspace",
+    "fmt": "cargo fmt --all -- --check",
+    "lint": "cargo clippy --workspace --all-targets -- -D warnings",
+    "test": "cargo test --workspace",
+    "check": "cargo check --workspace --all-targets",
+    "build": "cargo build --workspace",
+    "release": "cargo build --workspace --release",
+    "clean": "cargo clean"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/bl1nk-bot/bl1nk-doc-mcp.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/bl1nk-bot/bl1nk-doc-mcp/issues"
+  },
+  "homepage": "https://github.com/bl1nk-bot/bl1nk-doc-mcp#readme",
+  "devDependencies": {
+    "husky": "^9.1.7"
+  }
+}

@@ -34,11 +34,7 @@ pub trait GitGateway: Send + Sync {
     async fn head_commit(&self) -> Result<String, GitError>;
     async fn status_porcelain(&self) -> Result<Vec<(String, String)>, GitError>;
     async fn log(&self, max_count: u8) -> Result<Vec<CommitSummary>, GitError>;
-    async fn diff_names(
-        &self,
-        base_ref: &str,
-        head_ref: &str,
-    ) -> Result<Vec<String>, GitError>;
+    async fn diff_names(&self, base_ref: &str, head_ref: &str) -> Result<Vec<String>, GitError>;
 }
 
 #[derive(Debug, Clone)]
