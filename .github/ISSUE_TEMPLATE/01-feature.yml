@@ -1,0 +1,52 @@
+name: "Feature / Tool implementation"
+description: "Propose a new MCP tool, resource, prompt, or other feature"
+title: "feat: "
+labels: ["enhancement"]
+body:
+  - type: textarea
+    id: summary
+    attributes:
+      label: Summary
+      description: What should be built and why?
+      placeholder: "Implement the `validate_task_completion` MCP tool that checks completion gates..."
+    validations:
+      required: true
+  - type: textarea
+    id: target-files
+    attributes:
+      label: Target files
+      description: Files/modules this touches (helps map to BLUEPRINT phases)
+      placeholder: |
+        - src/tools/validate.rs
+        - src/domain/validation.rs
+    validations:
+      required: false
+  - type: textarea
+    id: dependencies
+    attributes:
+      label: Depends on
+      description: Issues or PRs that must land first
+      placeholder: "#7, #9"
+    validations:
+      required: false
+  - type: textarea
+    id: acceptance
+    attributes:
+      label: Acceptance criteria
+      description: How do we know it's done?
+      placeholder: |
+        - [ ] Tool input/output derive JsonSchema
+        - [ ] Unit + integration tests pass
+        - [ ] No arbitrary filesystem access (SafeRepositoryFs only)
+    validations:
+      required: true
+  - type: dropdown
+    id: priority
+    attributes:
+      label: Priority
+      options:
+        - P1 — Critical (blocking other work)
+        - P2 — High
+        - P3 — Medium
+    validations:
+      required: true
