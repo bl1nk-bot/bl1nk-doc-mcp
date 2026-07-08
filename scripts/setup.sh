@@ -23,6 +23,6 @@ fi
 echo "=== Run quality gate ==="
 cargo fmt --all
 cargo clippy --workspace --all-targets -- -D warnings
-cargo test --workspace
+cargo test --workspace --locked
 
 echo "=== setup complete ==="

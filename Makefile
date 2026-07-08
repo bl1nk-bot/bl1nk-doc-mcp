@@ -3,13 +3,13 @@
 all: fmt lint test check
 
 check:
-	cargo check --workspace --all-targets
+	cargo check --workspace --all-targets --locked
 
 test:
-	cargo test --workspace
+	cargo test --workspace --locked
 
 lint:
-	cargo clippy --workspace --all-targets -- -D warnings
+	cargo clippy --workspace --all-targets --locked -- -D warnings
 
 fmt:
 	cargo fmt --all -- --check
@@ -18,10 +18,10 @@ clean:
 	cargo clean
 
 build:
-	cargo build --workspace
+	cargo build --workspace --locked
 
 release:
-	cargo build --workspace --release
+	cargo build --workspace --release --locked
 
 setup:
 	bash scripts/setup.sh
@@ -35,13 +35,13 @@ bench:
 help:
 	@echo "Available targets:"
 	@echo "  all       - fmt + lint + test + check"
-	@echo "  check     - cargo check --workspace --all-targets"
+	@echo "  check     - cargo check --workspace --all-targets --locked"
 	@echo "  test      - cargo test --workspace"
 	@echo "  lint      - cargo clippy --workspace --all-targets -D warnings"
 	@echo "  fmt       - cargo fmt --all -- --check"
 	@echo "  clean     - cargo clean"
 	@echo "  build     - cargo build --workspace"
-	@echo "  release   - cargo build --workspace --release"
+	@echo "  release   - cargo build --workspace --release --locked"
 	@echo "  setup     - run scripts/setup.sh"
 	@echo "  hooks     - install git pre-commit hook"
 	@echo "  bench     - cargo bench"
