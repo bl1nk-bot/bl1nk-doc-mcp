@@ -62,6 +62,11 @@ pub struct SafeRepositoryFs {
 
 impl SafeRepositoryFs {
     pub fn new(repo_root: PathBuf) -> Self {
+        // Canonicalize so the containment check in `resolve` compares
+        // like-for-like: on Windows, `fs::canonicalize` expands 8.3 short
+        // names and adds the `\\?\` verbatim prefix, so an uncanonicalized
+        // root would never be a prefix of a canonicalized target.
+        let repo_root = std::fs::canonicalize(&repo_root).unwrap_or(repo_root);
         Self { repo_root }
     }
 
@@ -166,7 +171,7 @@ mod tests {
 
         let fs = SafeRepositoryFs::new(dir.path().to_path_buf());
         let resolved = fs.resolve("docs/README.md").unwrap();
-        assert_eq!(resolved, target);
+        assert_eq!(resolved, std::fs::canonicalize(&target).unwrap());
     }
 
     #[test]
