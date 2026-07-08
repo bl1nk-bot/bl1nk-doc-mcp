@@ -66,7 +66,10 @@ pub struct ContextBundleOutput {
     pub evidence: Vec<Evidence>,
 }
 
-fn load_task_contract(fs: &SafeRepositoryFs, task_id: &str) -> Result<crate::domain::task::TaskContract> {
+fn load_task_contract(
+    fs: &SafeRepositoryFs,
+    task_id: &str,
+) -> Result<crate::domain::task::TaskContract> {
     let json_path = format!("docs/work/tasks/{task_id}.json");
     if !fs.exists(&json_path)? {
         anyhow::bail!("task contract not found: {json_path}");
@@ -104,7 +107,11 @@ pub async fn get_context_bundle_impl(
     repo_root: PathBuf,
     input: ContextBundleInput,
 ) -> Result<ContextBundleOutput> {
-    anyhow::ensure!(repo_root.exists(), "repo root does not exist: {}", repo_root.display());
+    anyhow::ensure!(
+        repo_root.exists(),
+        "repo root does not exist: {}",
+        repo_root.display()
+    );
     let git = ProductionGitAdapter::new(repo_root.clone());
 
     let branch = git.branch().await?;
@@ -127,14 +134,16 @@ pub async fn get_context_bundle_impl(
     let recent_events = load_recent_ledger_events(&fs, input.recent_ledger_limit).await?;
     let related_files = Vec::new();
     let current_snapshot = head_commit.clone();
-    let invariants = task.invariants.clone().into_iter().map(|desc| Invariant {
-        description: desc.clone(),
-        rule: "from task contract".to_string(),
-    }).collect();
-    let required_validations = vec![
-        "clippy".to_string(),
-        "cargo test".to_string(),
-    ];
+    let invariants = task
+        .invariants
+        .clone()
+        .into_iter()
+        .map(|desc| Invariant {
+            description: desc.clone(),
+            rule: "from task contract".to_string(),
+        })
+        .collect();
+    let required_validations = vec!["clippy".to_string(), "cargo test".to_string()];
 
     let evidence = vec![
         Evidence {

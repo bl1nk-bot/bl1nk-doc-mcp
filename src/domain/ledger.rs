@@ -118,7 +118,10 @@ mod tests {
             passed: true,
             executed_at: chrono::Utc::now().to_rfc3339(),
         }];
-        assert!(event.is_valid(), "verified with passing validation should be valid");
+        assert!(
+            event.is_valid(),
+            "verified with passing validation should be valid"
+        );
     }
 }
 

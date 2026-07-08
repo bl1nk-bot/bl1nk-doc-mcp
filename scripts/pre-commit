@@ -1,0 +1,13 @@
+#!/bin/bash
+set -euo pipefail
+
+echo "=== pre-commit: fmt ==="
+cargo fmt --all
+
+echo "=== pre-commit: clippy ==="
+cargo clippy --workspace --all-targets -- -D warnings
+
+echo "=== pre-commit: test ==="
+cargo test --workspace
+
+echo "=== pre-commit: passed ==="

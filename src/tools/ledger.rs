@@ -12,9 +12,16 @@ pub async fn append_change_ledger_impl(
     repo_root: PathBuf,
     input: AppendLedgerInput,
 ) -> Result<AppendLedgerOutput> {
-    anyhow::ensure!(!input.task_id.trim().is_empty(), "task_id must not be empty");
+    anyhow::ensure!(
+        !input.task_id.trim().is_empty(),
+        "task_id must not be empty"
+    );
     anyhow::ensure!(!input.intent.trim().is_empty(), "intent must not be empty");
-    anyhow::ensure!(repo_root.exists(), "repo root does not exist: {}", repo_root.display());
+    anyhow::ensure!(
+        repo_root.exists(),
+        "repo root does not exist: {}",
+        repo_root.display()
+    );
     let parent = repo_root.join("docs/work");
     std::fs::create_dir_all(&parent)
         .with_context(|| format!("failed to create docs/work: {}", repo_root.display()))?;

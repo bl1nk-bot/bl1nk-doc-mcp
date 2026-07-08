@@ -190,7 +190,9 @@ mod tests {
     #[test]
     fn classify_changes_detects_migration() {
         let (classifications, actions) = classify_changes(&["migrations/001.sql".to_string()]);
-        assert!(classifications.iter().any(|c| c.classification_path == "migration_path"));
+        assert!(classifications
+            .iter()
+            .any(|c| c.classification_path == "migration_path"));
         assert!(actions.iter().any(|a| {
             matches!(
                 a.kind,
@@ -202,14 +204,13 @@ mod tests {
     #[test]
     fn classify_changes_detects_cargo_toml() {
         let (classifications, actions) = classify_changes(&["Cargo.toml".to_string()]);
-        assert!(classifications.iter().any(|c| c.classification_path == "crate_path"));
-        assert!(actions.iter().any(|a| matches!(
-            a.kind,
-            RequiredActionKind::RegenerateModuleMap
-        ) || matches!(
-            a.kind,
-            RequiredActionKind::RunAffectedTests
-        )));
+        assert!(classifications
+            .iter()
+            .any(|c| c.classification_path == "crate_path"));
+        assert!(actions.iter().any(
+            |a| matches!(a.kind, RequiredActionKind::RegenerateModuleMap)
+                || matches!(a.kind, RequiredActionKind::RunAffectedTests)
+        ));
     }
 
     #[test]

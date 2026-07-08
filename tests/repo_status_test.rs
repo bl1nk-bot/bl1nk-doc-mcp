@@ -1,11 +1,34 @@
 use std::path::PathBuf;
+use std::process::Command;
 
 use bl1nk_doc_mcp::tools::status::repo_status_impl;
+use tempfile::TempDir;
+
+/// CI checkouts are detached HEAD (`git branch --show-current` is empty),
+/// so tests that assert on branch state need a repo of their own.
+fn init_temp_repo() -> TempDir {
+    let dir = tempfile::tempdir().unwrap();
+    let git = |args: &[&str]| {
+        let status = Command::new("git")
+            .args(args)
+            .current_dir(dir.path())
+            .status()
+            .unwrap();
+        assert!(status.success(), "git {args:?} failed");
+    };
+    git(&["init", "-b", "main"]);
+    git(&["config", "user.email", "test@example.com"]);
+    git(&["config", "user.name", "Test"]);
+    std::fs::write(dir.path().join("README.md"), "test").unwrap();
+    git(&["add", "."]);
+    git(&["commit", "--no-gpg-sign", "-m", "initial commit"]);
+    dir
+}
 
 #[tokio::test]
 async fn test_repo_status_clean_repo() {
-    let repo_root = PathBuf::from(env!("CARGO_MANIFEST_DIR"));
-    let result = repo_status_impl(repo_root, Some(5)).await;
+    let repo = init_temp_repo();
+    let result = repo_status_impl(repo.path().to_path_buf(), Some(5)).await;
 
     if let Err(e) = &result {
         eprintln!("Error: {:?}", e);
@@ -14,7 +37,7 @@ async fn test_repo_status_clean_repo() {
     assert!(result.is_ok(), "repo_status should succeed in a git repo");
     let output = result.unwrap();
 
-    assert!(!output.branch.is_empty(), "branch should not be empty");
+    assert_eq!(output.branch, "main", "branch should be the repo's branch");
     assert!(
         !output.head_commit.is_empty(),
         "head_commit should not be empty"
