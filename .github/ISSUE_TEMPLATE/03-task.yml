@@ -1,0 +1,32 @@
+name: "Task / Chore"
+description: "Docs, CI, refactoring, testing, or other maintenance work"
+title: "chore: "
+labels: ["maintenance"]
+body:
+  - type: textarea
+    id: what
+    attributes:
+      label: What needs to be done?
+    validations:
+      required: true
+  - type: dropdown
+    id: kind
+    attributes:
+      label: Kind of work
+      description: Pick the closest match — use it as the title prefix too (docs/chore/refactor/test/ci)
+      options:
+        - chore (maintenance)
+        - docs (documentation)
+        - refactor
+        - test (testing)
+        - ci (devops)
+    validations:
+      required: true
+  - type: textarea
+    id: done-when
+    attributes:
+      label: Done when
+      placeholder: |
+        - [ ] ...
+    validations:
+      required: false
