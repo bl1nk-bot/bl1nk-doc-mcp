@@ -40,7 +40,6 @@ coverage/
 *.sublime-project
 __pycache__/
 
-# Node.js (husky/devops)
+# Node.js
 node_modules/
 package-lock.json
-
